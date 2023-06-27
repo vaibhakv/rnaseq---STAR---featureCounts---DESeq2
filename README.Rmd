@@ -1,6 +1,6 @@
 ---
 title: "RNA-Seq -- Differential Gene Expression Analysis"
-author: "Vaibhav Gawde"
+author: "vaibhakv"
 date: "2023-06-27"
 output: 
   github_document:
@@ -44,7 +44,8 @@ df <- featureCounts(files = c("data/output/SRR13978640.aln/SRR13978640Aligned.so
                     "data/output/SRR13978645.aln/SRR13978645Aligned.sortedByCoord.out.bam"),
                         annot.ext = "genome/Saccharomyces_cerevisiae.R64-1-1.109.gtf", 
                         isGTFAnnotationFile = TRUE,
-                        isPairedEnd = TRUE)
+                        isPairedEnd = TRUE,
+                        nthreads = 4)
 
 ```
 
@@ -55,7 +56,7 @@ colnames(raw_counts) <- paste0("SRR1397864",0:5)
 ```
 
 Create the metadata for samples
-```{r }
+```{r metadata}
 metadata <- tibble(sample = paste0("SRR1397864",0:5), 
                    condition = rep(c("SPRC", "control"), each=3))
 
@@ -63,40 +64,54 @@ metadata <- tibble(sample = paste0("SRR1397864",0:5),
 
 ### DESeqDataSetFromMatrix
 Then we make a DESeq2 object 
-```{r }
+```{r DESeq_object}
 dds <- DESeqDataSetFromMatrix(countData = raw_counts, colData = metadata, design = ~ condition )
 ```
 
-We filter out the genes with low counts
-```{r }
+Visualizing the counts
+```{r assay}
+head(assay(dds)) 
+```
+
+We can filter out the genes with low counts
+```{r filter}
 keep <- rowSums(counts(dds)) > 10
 dds <-  dds[keep,]
 ```
 
 Estimating size factors and getting normalized counts
-```{r }
+```{r size_factors}
 sizeFactors <- estimateSizeFactors(dds)
 normalized_counts <- counts(sizeFactors, normalized=TRUE)
 ```
 
 We transform the data in order to minimize differences between samples for rows with small counts, and which helps in normalizing the data with respect to library size. 
 
+* We can use 2 types of transformation
+  + `vst`
+  + `rlog`
+
 #### Variance stabilizing transformation
-```{r }
+```{r vst}
 vst <-  varianceStabilizingTransformation(dds)
 plotPCA(vst)
 ```
 
 #### Regularized log transformation
 
-```{r }
+```{r rlog}
 rlog_dds <- rlog(dds)
 plotPCA(rlog_dds)
 ```
-As you can see rlog transformation is more robust than vst
+As you can see `rlog` transformation is more robust than `vst`.
 
 ### Heatmap of samples
-```{r }
+
+So for plotting the heatmap of sample distances, we transpose the `rlog_dds` matrix and calculate distances between them
+
+Then we plot the heatmap.
+
+```{r sample_heatmap}
 sampleDist <- dist(t(assay(rlog_dds)))
 sampleDistMatrix <- as.matrix(sampleDist)
 rownames(sampleDistMatrix) <- dds$condition
@@ -109,42 +124,71 @@ pheatmap(sampleDistMatrix,
 
 
 ### Running DESeq
-```{r }
+
+We finally run `DESEq` on our original deseq object `dds` and not the transformed ones. Cause the DESeq does the transformation
+
+```{r DESeq2_run}
 res_dds <- DESeq(dds)
 res <- results(res_dds)
+
+```
+
+We ran `DESeq` and stored the results into `res`
+
+Here, you can see what the column names of `res` indicate. And also the `summary` of each column
+
+##### Column names
+
+```{r mcols_deseq}
 mcols(res)
+```
+
+##### Summary
+
+```{r deseq_summary}
 summary(res)
 ```
 
-Extracting significant genes 
-```{r }
+#### Extracting significant genes 
+
+In order to make a **heatmap** we'll have to set some **thresholds** first to extract only the top genes.
+These include both *upregulated* and *downregulated*
+
+```{r significant_genes}
 res_sig <- subset(res, padj < 0.05 & baseMean > 100 & abs(log2FoldChange) > 1)
+```
+
+Most *upregulated*
+
+```{r top_sig}
 head(res_sig[order(res_sig$log2FoldChange),])
+```
+
+Most *downregulated*
+
+```{r bottom_sig}
 head(res_sig[order(res_sig$log2FoldChange, decreasing = TRUE),])
 ```
 
 ### MA plot
-```{r }
+
+MA plots are commonly used to represent log fold-change versus mean expression between two treatments
+They are scatter plots with **base-2 log fold-change** along the *y-axis* and **normalized mean expression** along the *x-axis*
+
+First we have to **shrink** the log2fold changes before plotting. 
+
+##### What is shrinkage?
+
+In short, it looks at the largest fold changes that are not due to low counts and uses these to inform a prior distribution. So the large fold changes from genes with lots of statistical information are not shrunk, while the imprecise fold changes are shrunk.
+
+This allows you to compare all estimated LFC across experiments. `DESeq2` does this by default. We're just doing it to make the MA plot
+
+```{r MA_plot}
 res_shrink <- lfcShrink(res_dds, coef = "condition_SPRC_vs_control", type = "apeglm")
+
 plotMA(res_shrink, ylim = c(-3, 3))
 ```
 
-### Heatmap
-```{r }
-sig_matrix <- normalized_counts[rownames(res_sig),]
-sig_matrix.z <- t(apply(sig_matrix, 1, scale))
-colnames(sig_matrix.z) <- colnames(sig_matrix)
-
-heat_colors <- colorRampPalette(brewer.pal(6, "PuOr"))(100)
-
-pheatmap(mat = sig_matrix.z, 
-         cluster_rows = T, 
-         cluster_cols = T, 
-         labels_col = colnames(sig_matrix.z), 
-         labels_row = rownames(sig_matrix.z),
-         color = heat_colors,
-         height = 40)
-```
 
 ```{r }
 gene_ids_sig <- rownames(res_sig)
@@ -157,13 +201,13 @@ listEnsembl()
 ensembl <- useEnsembl(biomart = "genes")
 ```
 
-Selecting the dataset
+Selecting the **dataset**
 ```{r messege=FALSE}
 listDatasets(ensembl) 
 bio.mart <- useMart("ensembl", "scerevisiae_gene_ensembl")
 ```
 
-Listing the attributes and filters
+Listing the **attributes** and **filters**
 ```{r messege=FALSE}
 listAttributes(bio.mart)
 listFilters(bio.mart) 
@@ -186,12 +230,36 @@ bm_res_sig <- getBM(attributes = bm_attr,
 bm_res_sig
 ```
 
-### Most significant Differentially Expressed Genes
-```{r }
+#### Most significant Differentially Expressed Genes
+```{r sig_gene_name}
 bm_res_sig$external_gene_name
 ```
 
-Preparation for the Volcano plot
+### Heatmap
+Preparation for the Heatmap
+
+```{r heatmap_matrix}
+sig_matrix <- normalized_counts[rownames(res_sig),]
+sig_matrix.z <- t(apply(sig_matrix, 1, scale))
+rownames(sig_matrix.z) <- bm_res_sig$external_gene_name
+colnames(sig_matrix.z) <- colnames(sig_matrix)
+```
+
+```{r heatcolors}
+heat_colors <- colorRampPalette(brewer.pal(6, "PuOr"))(100)
+```
+
+```{r heatmap}
+pheatmap(mat = sig_matrix.z, 
+         cluster_rows = T, 
+         cluster_cols = T, 
+         labels_col = colnames(sig_matrix.z), 
+         labels_row = rownames(sig_matrix.z),
+         color = heat_colors,
+         height = 40)
+```
+
+Preparation for the **Volcano plot**
 ```{r }
 res_tb <- res %>%
   data.frame() %>%
@@ -199,20 +267,20 @@ res_tb <- res %>%
   as_tibble()
 ```
 
-Getting the gene name instead of ensembl ids
+Getting the **gene name** instead of ensembl ids
 ```{r }
 res_tb <- res_tb %>% 
   mutate(gene_labels = bm_res$external_gene_name) 
 ```
 
-Setting the threshold
+Setting the **threshold**
 ```{r }
 res_tb <- res_tb %>% 
   mutate(threshold = padj < 0.05 & abs(log2FoldChange) > 1) 
 ```
 
 ### Volcano plot
-```{r }
+```{r volcano_plot}
 ggplot(res_tb, aes(x = log2FoldChange, y = -log10(padj))) +
   geom_point(aes(colour = threshold)) +
   geom_text_repel(aes(label = gene_labels), alpha = 0.5) +

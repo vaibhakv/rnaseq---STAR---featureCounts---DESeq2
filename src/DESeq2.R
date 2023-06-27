@@ -16,7 +16,8 @@ df <- featureCounts(files = c("data/output/SRR13978640.aln/SRR13978640Aligned.so
                     "data/output/SRR13978645.aln/SRR13978645Aligned.sortedByCoord.out.bam"),
                         annot.ext = "genome/Saccharomyces_cerevisiae.R64-1-1.109.gtf", 
                         isGTFAnnotationFile = TRUE,
-                        isPairedEnd = TRUE)
+                        isPairedEnd = TRUE,
+                        nthreads = 4)
 
 raw_counts <- df$counts
 colnames(raw_counts) <- paste0("SRR1397864",0:5) 
@@ -26,7 +27,7 @@ metadata <- tibble(sample = paste0("SRR1397864",0:5), condition = rep(c("SPRC", 
 
 #making a deseq object from matrix
 dds <- DESeqDataSetFromMatrix(countData = raw_counts, colData = metadata, design = ~ condition )
-assay(dds)  
+head(assay(dds)) 
 
 keep <- rowSums(counts(dds)) > 10
 dds <-  dds[keep,]
@@ -76,9 +77,10 @@ plotMA(res_shrink, ylim = c(-3, 3))
 #Heatmap of differentially expressed genes
 sig_matrix <- normalized_counts[rownames(res_sig),]
 sig_matrix.z <- t(apply(sig_matrix, 1, scale))
+rownames(sig_matrix.z) <- bm_res_sig$external_gene_name
 colnames(sig_matrix.z) <- colnames(sig_matrix)
 
-heat_colors <- colorRampPalette(brewer.pal(6, "PuOr"))(100)
+heat_colors <- colorRampPalette(brewer.pal(6, "BrBG"))(100)
 
 pheatmap(mat = sig_matrix.z, 
          cluster_rows = T, 
@@ -113,7 +115,7 @@ bm_res_sig <- getBM(attributes = bm_attr,
                 filters = c("ensembl_gene_id"), 
                 values = gene_ids_sig, mart = bio.mart)
 
-bm_res$external_gene_name
+bm_res_sig$external_gene_name
 
 
 res_tb <- res %>%
