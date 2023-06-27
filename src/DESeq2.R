@@ -88,7 +88,8 @@ pheatmap(mat = sig_matrix.z,
          labels_col = colnames(sig_matrix.z), 
          labels_row = rownames(sig_matrix.z),
          color = heat_colors,
-         height = 40)
+         fontsize_row = 6,
+         height = 60)
 
 gene_ids_sig <- rownames(res_sig)
 gene_ids <- rownames(res)

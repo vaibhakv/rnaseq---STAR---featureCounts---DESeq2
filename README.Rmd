@@ -227,7 +227,7 @@ bm_res_sig <- getBM(attributes = bm_attr,
                 filters = c("ensembl_gene_id"), 
                 values = gene_ids_sig, mart = bio.mart)
 
-bm_res_sig
+head(bm_res_sig)
 ```
 
 #### Most significant Differentially Expressed Genes
@@ -256,7 +256,8 @@ pheatmap(mat = sig_matrix.z,
          labels_col = colnames(sig_matrix.z), 
          labels_row = rownames(sig_matrix.z),
          color = heat_colors,
-         height = 40)
+         fontsize_row = 6,
+         height = 60)
 ```
 
 Preparation for the **Volcano plot**

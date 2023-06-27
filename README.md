@@ -101,19 +101,19 @@ df <- featureCounts(files = c("data/output/SRR13978640.aln/SRR13978640Aligned.so
     ## ||    Paired-end reads are included.                                          ||
     ## ||    Total alignments : 3294536                                              ||
     ## ||    Successfully assigned alignments : 2310619 (70.1%)                      ||
-    ## ||    Running time : 0.13 minutes                                             ||
+    ## ||    Running time : 0.14 minutes                                             ||
     ## ||                                                                            ||
     ## || Process BAM file SRR13978641Aligned.sortedByCoord.out.bam...               ||
     ## ||    Paired-end reads are included.                                          ||
     ## ||    Total alignments : 2667430                                              ||
     ## ||    Successfully assigned alignments : 2045225 (76.7%)                      ||
-    ## ||    Running time : 0.10 minutes                                             ||
+    ## ||    Running time : 0.11 minutes                                             ||
     ## ||                                                                            ||
     ## || Process BAM file SRR13978642Aligned.sortedByCoord.out.bam...               ||
     ## ||    Paired-end reads are included.                                          ||
     ## ||    Total alignments : 5981649                                              ||
     ## ||    Successfully assigned alignments : 2887042 (48.3%)                      ||
-    ## ||    Running time : 0.70 minutes                                             ||
+    ## ||    Running time : 0.65 minutes                                             ||
     ## ||                                                                            ||
     ## || Process BAM file SRR13978643Aligned.sortedByCoord.out.bam...               ||
     ## ||    Paired-end reads are included.                                          ||
@@ -468,123 +468,30 @@ bm_res_sig <- getBM(attributes = bm_attr,
                 filters = c("ensembl_gene_id"), 
                 values = gene_ids_sig, mart = bio.mart)
 
-bm_res_sig
+head(bm_res_sig)
 ```
 
-    ##    ensembl_gene_id external_gene_name chromosome_name start_position
-    ## 1          YAL061W               BDH2               I          33448
-    ## 2          YBR213W               MET8              II         650368
-    ## 3          YCL027W               FUS1             III          71803
-    ## 4          YDR453C               TSA2              IV        1365072
-    ## 5          YER011W               TIR1               V         175248
-    ## 6          YER042W               MXR1               V         234937
-    ## 7          YER069W             ARG5,6               V         295410
-    ## 8          YER091C               MET6               V         339864
-    ## 9          YFR030W              MET10              VI         213312
-    ## 10         YGR060W              ERG25             VII         610564
-    ## 11         YGR177C               ATF2             VII         848829
-    ## 12         YHR007C              ERG11            VIII         120091
-    ## 13         YIL011W               TIR3              IX         333727
-    ## 14         YIL074C              SER33              IX         221081
-    ## 15         YIL101C               XBP1              IX         175307
-    ## 16         YJL088W               ARG3               X         268799
-    ## 17         YJR010W               MET3               X         456239
-    ## 18         YJR137C               MET5               X         678957
-    ## 19         YKL001C              MET14              XI         438777
-    ## 20       YKL068W-A                                 XI         309206
-    ## 21         YKL109W               HAP4              XI         232227
-    ## 22         YKR069W               MET1              XI         571612
-    ## 23         YLL061W               MMP1             XII          17956
-    ## 24         YLL062C               MHT1             XII          16639
-    ## 25         YLR056W               ERG3             XII         253861
-    ## 26         YLR092W               SUL2             XII         323544
-    ## 27         YLR303W              MET17             XII         732542
-    ## 28         YML018C                               XIII         234771
-    ## 29         YMR011W               HXT2            XIII         288079
-    ## 30         YMR015C               ERG5            XIII         300869
-    ## 31         YMR081C               ISF1            XIII         430079
-    ## 32         YOL140W               ARG8              XV          58759
-    ## 33         YOR010C               TIR2              XV         346195
-    ## 34         YOR028C               CIN5              XV         383533
-    ## 35         YPL111W               CAR1             XVI         339944
-    ## 36         YPL274W               SAM3             XVI          22938
-    ## 37         YPR167C              MET16             XVI         876847
-    ##    end_position
-    ## 1         34701
-    ## 2        651192
-    ## 3         73341
-    ## 4       1365662
-    ## 5        176012
-    ## 6        235491
-    ## 7        298001
-    ## 8        342167
-    ## 9        216419
-    ## 10       611493
-    ## 11       850436
-    ## 12       121683
-    ## 13       334536
-    ## 14       222490
-    ## 15       177250
-    ## 16       269815
-    ## 17       457774
-    ## 18       683285
-    ## 19       439385
-    ## 20       309442
-    ## 21       233891
-    ## 22       573393
-    ## 23        19707
-    ## 24        17613
-    ## 25       254958
-    ## 26       326225
-    ## 27       733876
-    ## 28       235952
-    ## 29       289704
-    ## 30       302485
-    ## 31       431095
-    ## 32        60030
-    ## 33       346950
-    ## 34       384420
-    ## 35       340945
-    ## 36        24701
-    ## 37       877632
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    description
-    ## 1                                                                                                                                                                                                                                                                                                                                                                Putative medium-chain alcohol dehydrogenase with similarity to BDH1; transcription induced by constitutively active PDR1 and PDR3 [Source:SGD;Acc:S000000057]
-    ## 2                                                                                                                                                                                                                                                                                             Bifunctional dehydrogenase and ferrochelatase; involved in the biosynthesis of siroheme, a prosthetic group used by sulfite reductase; required for sulfate assimilation and methionine biosynthesis [Source:SGD;Acc:S000000417]
-    ## 3                                                                                                                                                                                                                                                               Membrane protein localized to the shmoo tip; required for cell fusion; expression regulated by mating pheromone; proposed to coordinate signaling, fusion, and polarization events required for fusion; potential Cdc28p substrate [Source:SGD;Acc:S000000532]
-    ## 4                                                                                                                Stress inducible cytoplasmic thioredoxin peroxidase; cooperates with Tsa1p in the removal of reactive oxygen, nitrogen and sulfur species using thioredoxin as hydrogen donor; deletion enhances the mutator phenotype of tsa1 mutants; protein abundance increases in response to DNA replication stress; TSA2 has a paralog, TSA1, that arose from the whole genome duplication [Source:SGD;Acc:S000002861]
-    ## 5                                                                                                                                                                                                                                                          Cell wall mannoprotein; expression is downregulated at acidic pH and induced by cold shock and anaerobiosis; abundance is increased in cells cultured without shaking; member of the Srp1p/Tip1p family of serine-alanine-rich proteins [Source:SGD;Acc:S000000813]
-    ## 6                                                                                                                                                                                                                             Methionine-S-sulfoxide reductase; involved in the response to oxidative stress; protects iron-sulfur clusters from oxidative inactivation along with MXR2; involved in the regulation of lifespan; reduced activity of human homolog implicated in Alzheimer disease [Source:SGD;Acc:S000000844]
-    ## 7  Acetylglutamate kinase and N-acetyl-gamma-glutamyl-phosphate reductase; N-acetyl-L-glutamate kinase (NAGK) catalyzes the 2nd and N-acetyl-gamma-glutamyl-phosphate reductase (NAGSA), the 3rd step in arginine biosynthesis; synthesized as a precursor which is processed in the mitochondrion to yield mature NAGK and NAGSA; enzymes form a metabolon complex with Arg2p; NAGK C-terminal domain stabilizes the enzymes, slows catalysis and is involved in feed-back inhibition by arginine [Source:SGD;Acc:S000000871]
-    ## 8                                                                                                                                                                                                                                                                                Cobalamin-independent methionine synthase; involved in methionine biosynthesis and regeneration; requires a minimum of two glutamates on the methyltetrahydrofolate substrate, similar to bacterial metE homologs [Source:SGD;Acc:S000000893]
-    ## 9                                                                                                                                                                                                                                                                                                                                                                                                           Subunit alpha of assimilatory sulfite reductase; complex converts sulfite into sulfide [Source:SGD;Acc:S000001926]
-    ## 10                                                                                                                                                                      C-4 methyl sterol oxidase; catalyzes the first of three steps required to remove two C-4 methyl groups from an intermediate in ergosterol biosynthesis; mutants accumulate the sterol intermediate 4,4-dimethylzymosterol; human MSMO1 functionally complements the growth defect caused by repression of ERG25 expression [Source:SGD;Acc:S000003292]
-    ## 11                                                                                                                                                                                                                                                                                                                                  Alcohol acetyltransferase; may play a role in steroid detoxification; forms volatile esters during fermentation, which is important for brewing and winemaking [Source:SGD;Acc:S000003409]
-    ## 12                                                                  Lanosterol 14-alpha-demethylase; catalyzes C-14 demethylation of lanosterol to form 4,4''-dimethyl cholesta-8,14,24-triene-3-beta-ol in ergosterol biosynthesis pathway; transcriptionally down-regulated when ergosterol is in excess; member of cytochrome P450 family; associated and coordinately regulated with the P450 reductase Ncp1p; human CYP51A1 functionally complements the lethality of the erg11 null mutation [Source:SGD;Acc:S000001049]
-    ## 13                                                                                                                                                                                                                                                            Cell wall mannoprotein; member of Srp1p/Tip1p family of serine-alanine-rich proteins; expressed under anaerobic conditions and required for anaerobic growth; TIR3 has a paralog, TIR2, that arose from the whole genome duplication [Source:SGD;Acc:S000001273]
-    ## 14                                                                                                                 3-phosphoglycerate dehydrogenase and alpha-ketoglutarate reductase; 3PG dehydrogenase that catalyzes the first step in serine and glycine biosynthesis; also functions as an alpha-ketoglutarate reductase, converting alpha-ketoglutarate to D-2-hydroxyglutarate (D-2HG); localizes to the cytoplasm; SER33 has a paralog, SER3, that arose from the whole genome duplication [Source:SGD;Acc:S000001336]
-    ## 15            Transcriptional repressor; binds promoter sequences of cyclin genes, CYS3, and SMF2; not expressed during log phase of growth, but induced by stress or starvation during mitosis, and late in meiosis; represses 15% of all yeast genes as cells transition to quiescence; important for maintaining G1 arrest and for longevity of quiescent cells; member of Swi4p/Mbp1p family; phosphorylated by Cdc28p; relative distribution to nucleus increases upon DNA replication stress [Source:SGD;Acc:S000001363]
-    ## 16                                                                                                                                                                                                                                                                                                                              Ornithine carbamoyltransferase; also known as carbamoylphosphate:L-ornithine carbamoyltransferase; catalyzes the biosynthesis of the arginine precursor citrulline [Source:SGD;Acc:S000003624]
-    ## 17                                                                                                                                                                                                                                                              ATP sulfurylase; catalyzes the primary step of intracellular sulfate activation, essential for assimilatory reduction of sulfate to sulfide, involved in methionine metabolism; human homolog PAPSS2 complements yeast null mutant [Source:SGD;Acc:S000003771]
-    ## 18                                                                                                                                                                                                                                                                                                                                                                                      Sulfite reductase beta subunit; involved in amino acid biosynthesis, transcription repressed by methionine [Source:SGD;Acc:S000003898]
-    ## 19                                                                                                                                                                                                                                                                                                                                             Adenylylsulfate kinase; required for sulfate assimilation and involved in methionine metabolism; human homolog PAPSS2 complements yeast null mutant [Source:SGD;Acc:S000001484]
-    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                 Putative protein of unknown function; identified by homology to Ashbya gossypii [Source:SGD;Acc:S000028524]
-    ## 21                                                                                                                                                                                                              Transcription factor; subunit of the heme-activated, glucose-repressed Hap2p/3p/4p/5p CCAAT-binding complex, a transcriptional activator and global regulator of respiratory gene expression; provides the principal activation function of the complex; involved in diauxic shift [Source:SGD;Acc:S000001592]
-    ## 22                                                                                                                                                                                                                                                                              S-adenosyl-L-methionine uroporphyrinogen III transmethylase; involved in the biosynthesis of siroheme, a prosthetic group used by sulfite reductase; required for sulfate assimilation and methionine biosynthesis [Source:SGD;Acc:S000001777]
-    ## 23                                                                                                                                                                                                                                                                                                                             High-affinity S-methylmethionine permease; required for utilization of S-methylmethionine as a sulfur source; has similarity to S-adenosylmethionine permease Sam3p [Source:SGD;Acc:S000003984]
-    ## 24                                                                                                                                                                                                                                                                                                           S-methylmethionine-homocysteine methyltransferase; functions along with Sam4p in the conversion of S-adenosylmethionine (AdoMet) to methionine to control the methionine/AdoMet ratio [Source:SGD;Acc:S000003985]
-    ## 25                                                                                                                C-5 sterol desaturase; glycoprotein that catalyzes the introduction of a C-5(6) double bond into episterol, a precursor in ergosterol biosynthesis; transcriptionally down-regulated when ergosterol is in excess; mutants are viable, but cannot grow on non-fermentable carbon sources; substrate of HRD ubiquitin ligase; mutation is functionally complemented by human SC5D [Source:SGD;Acc:S000004046]
-    ## 26                                                                                                                                                                                                                                                                                                      High affinity sulfate permease; sulfate uptake is mediated by specific sulfate transporters Sul1p and Sul2p, which control the concentration of endogenous activated sulfate intermediates [Source:SGD;Acc:S000004082]
-    ## 27                                                                                                                                                                                                                                                                                                                                                                                            O-acetyl homoserine-O-acetyl serine sulfhydrylase; required for Methionine and cysteine biosynthesis [Source:SGD;Acc:S000004294]
-    ## 28                                                                                                Protein of unknown function; green fluorescent protein (GFP)-fusion protein localizes to the membrane of the vacuole; physical interaction with Atg27p suggests a possible role in autophagy; YML018C is not an essential gene; relative distribution to the vacuolar membrane decreases upon DNA replication stress; YML018C has a paralog, THI74, that arose from the whole genome duplication [Source:SGD;Acc:S000004480]
-    ## 29                                                                                                                                                                                                                                                                                                                                  High-affinity glucose transporter of the major facilitator superfamily; expression is induced by low levels of glucose and repressed by high levels of glucose [Source:SGD;Acc:S000004613]
-    ## 30                                                                                                                                                                                                                                                                                        C-22 sterol desaturase; a cytochrome P450 enzyme that catalyzes the formation of the C-22(23) double bond in the sterol side chain in ergosterol biosynthesis; may be a target of azole antifungal drugs [Source:SGD;Acc:S000004617]
-    ## 31                                                                                                                                                                                                                               Serine-rich, hydrophilic protein; overexpression suppresses growth defects of hap2, hap3, and hap4 mutants; expression is under glucose control; cotranscribed with NAM7 in a cyp1 mutant; ISF1 has a paralog, MBR1, that arose from the whole genome duplication [Source:SGD;Acc:S000004686]
-    ## 32                                                                                                                                                                                                                                                                                                                                                                             Acetylornithine aminotransferase; catalyzes the fourth step in the biosynthesis of the arginine precursor ornithine [Source:SGD;Acc:S000005500]
-    ## 33                                                                                                                                                                                                                                                              Putative cell wall mannoprotein; member of the Srp1p/Tip1p family of serine-alanine-rich proteins; transcription is induced by cold shock and anaerobiosis; TIR2 has a paralog, TIR3, that arose from the whole genome duplication [Source:SGD;Acc:S000005536]
-    ## 34                                                                                        Basic leucine zipper (bZIP) transcription factor of the yAP-1 family; physically interacts with the Tup1-Cyc8 complex and recruits Tup1p to its targets; mediates pleiotropic drug resistance and salt tolerance; nuclearly localized under oxidative stress and sequestered in the cytoplasm by Lot6p under reducing conditions; CIN5 has a paralog, YAP6, that arose from the whole genome duplication [Source:SGD;Acc:S000005554]
-    ## 35                                                                                                                                                                                                                           Arginase, catabolizes arginine to ornithine and urea; expression responds to both induction by arginine and nitrogen catabolite repression; disruption decreases production of carcinogen ethyl carbamate during wine fermentation and also enhances freeze tolerance [Source:SGD;Acc:S000006032]
-    ## 36                                                                                                                                                                                                                                                                                                                           High-affinity S-adenosylmethionine permease; required for utilization of S-adenosylmethionine as a sulfur source; has similarity to S-methylmethionine permease Mmp1p [Source:SGD;Acc:S000006195]
-    ## 37                                                                                                                                                                                                                                                                     3'-phosphoadenylsulfate reductase; reduces 3'-phosphoadenylyl sulfate to adenosine-3',5'-bisphosphate and free sulfite using reduced thioredoxin as cosubstrate, involved in sulfate assimilation and methionine metabolism [Source:SGD;Acc:S000006371]
+    ##   ensembl_gene_id external_gene_name chromosome_name start_position
+    ## 1         YAL061W               BDH2               I          33448
+    ## 2         YBR213W               MET8              II         650368
+    ## 3         YCL027W               FUS1             III          71803
+    ## 4         YDR453C               TSA2              IV        1365072
+    ## 5         YER011W               TIR1               V         175248
+    ## 6         YER042W               MXR1               V         234937
+    ##   end_position
+    ## 1        34701
+    ## 2       651192
+    ## 3        73341
+    ## 4      1365662
+    ## 5       176012
+    ## 6       235491
+    ##                                                                                                                                                                                                                                                                                                                                                                                                     description
+    ## 1                                                                                                                                                                                                                                                 Putative medium-chain alcohol dehydrogenase with similarity to BDH1; transcription induced by constitutively active PDR1 and PDR3 [Source:SGD;Acc:S000000057]
+    ## 2                                                                                                                                                                              Bifunctional dehydrogenase and ferrochelatase; involved in the biosynthesis of siroheme, a prosthetic group used by sulfite reductase; required for sulfate assimilation and methionine biosynthesis [Source:SGD;Acc:S000000417]
+    ## 3                                                                                                                                                Membrane protein localized to the shmoo tip; required for cell fusion; expression regulated by mating pheromone; proposed to coordinate signaling, fusion, and polarization events required for fusion; potential Cdc28p substrate [Source:SGD;Acc:S000000532]
+    ## 4 Stress inducible cytoplasmic thioredoxin peroxidase; cooperates with Tsa1p in the removal of reactive oxygen, nitrogen and sulfur species using thioredoxin as hydrogen donor; deletion enhances the mutator phenotype of tsa1 mutants; protein abundance increases in response to DNA replication stress; TSA2 has a paralog, TSA1, that arose from the whole genome duplication [Source:SGD;Acc:S000002861]
+    ## 5                                                                                                                                           Cell wall mannoprotein; expression is downregulated at acidic pH and induced by cold shock and anaerobiosis; abundance is increased in cells cultured without shaking; member of the Srp1p/Tip1p family of serine-alanine-rich proteins [Source:SGD;Acc:S000000813]
+    ## 6                                                                                                              Methionine-S-sulfoxide reductase; involved in the response to oxidative stress; protects iron-sulfur clusters from oxidative inactivation along with MXR2; involved in the regulation of lifespan; reduced activity of human homolog implicated in Alzheimer disease [Source:SGD;Acc:S000000844]
 
 #### Most significant Differentially Expressed Genes
 
@@ -620,7 +527,8 @@ pheatmap(mat = sig_matrix.z,
          labels_col = colnames(sig_matrix.z), 
          labels_row = rownames(sig_matrix.z),
          color = heat_colors,
-         height = 40)
+         fontsize_row = 6,
+         height = 60)
 ```
 
 ![](README_files/figure-gfm/heatmap-1.png)<!-- -->
