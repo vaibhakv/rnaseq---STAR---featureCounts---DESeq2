@@ -196,25 +196,25 @@ gene_ids <- rownames(res)
 ```
 
 ### bioMart
-```{r messege=FALSE}
-listEnsembl()
+```{r, messege=FALSE}
+head(listEnsembl())
 ensembl <- useEnsembl(biomart = "genes")
 ```
 
 Selecting the **dataset**
-```{r messege=FALSE}
-listDatasets(ensembl) 
+```{r, messege=FALSE}
+head(listDatasets(ensembl))
 bio.mart <- useMart("ensembl", "scerevisiae_gene_ensembl")
 ```
 
 Listing the **attributes** and **filters**
-```{r messege=FALSE}
-listAttributes(bio.mart)
-listFilters(bio.mart) 
+```{r, messege=FALSE}
+head(listAttributes(bio.mart))
+head(listFilters(bio.mart))
 ```
 
 Getting the data from bioMart
-```{r messege=FALSE}
+```{r, messege=FALSE}
 bm_attr <- c("ensembl_gene_id", "external_gene_name", 
            "chromosome_name", "start_position", "end_position",
            "description")
